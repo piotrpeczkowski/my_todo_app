@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_todo_app/home_page/home_page.dart';
 import 'package:my_todo_app/splash_screen/splash_screen.dart';
 
 void main() {
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
