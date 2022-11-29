@@ -46,7 +46,8 @@ class NoteWidget extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () =>
+                      ModalBottomSheetUpdate.updatePosition(context),
                   icon: const Icon(
                     Icons.edit,
                     color: Colors.orange,
