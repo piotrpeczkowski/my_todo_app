@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_todo_app/main.dart';
+import 'package:my_todo_app/widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 255, 140, 0),
         tooltip: 'add TODO',
-        onPressed: () {},
+        onPressed: () => ModalBottomSheetAdd.addPosition(context),
         child: const Icon(Icons.add),
       ),
       body: Container(
@@ -56,7 +57,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         child: ListView(
-          children: const [NoteWidget('Test title', "29.11.2022")],
+          children: const [
+            NoteWidget('Test title', "29.11.2022"),
+          ],
         ),
       ),
     );
