@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_todo_app/main.dart';
@@ -56,11 +57,31 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        child: ListView(
-          children: const [
-            NoteWidget('Test title', "29.11.2022"),
-          ],
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('tasks')
+                .orderBy('timestamp', descending: false)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Coś poszło nie tak.. :C');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(
+                  color: Colors.white54,
+                );
+              }
+
+              final documents = snapshot.data!.docs;
+
+              return ListView(
+                children: [
+                  for (final document in documents) ...[
+                    NoteWidget(document['title'], document['date'])
+                  ],
+                ],
+              );
+            }),
       ),
     );
   }
