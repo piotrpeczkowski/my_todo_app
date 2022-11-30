@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NoteWidget extends StatelessWidget {
   const NoteWidget(
@@ -64,6 +66,10 @@ class NoteWidget extends StatelessWidget {
 
 class ModalBottomSheetAdd {
   static void addPosition(context) {
+    final timestamp = Timestamp.now();
+    final date = DateFormat('dd.MM.yyyy').format(DateTime.now());
+    final title = TextEditingController();
+    var isChanged = false;
     showModalBottomSheet(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       isScrollControlled: true,
@@ -126,7 +132,10 @@ class ModalBottomSheetAdd {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5)),
                       ),
-                      controller: null,
+                      controller: title,
+                      onChanged: (newValue) {
+                        isChanged = true;
+                      },
                     ),
                   ),
                 ),
@@ -137,9 +146,16 @@ class ModalBottomSheetAdd {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange.withOpacity(0.9),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                    onPressed: isChanged == false
+                        ? null
+                        : () {
+                            FirebaseFirestore.instance.collection('tasks').add({
+                              'title': title.text,
+                              'timestamp': timestamp,
+                              'date': date,
+                            });
+                            Navigator.of(context).pop();
+                          },
                     child: Text('Dodaj',
                         style: GoogleFonts.lato(
                           fontSize: 16,
