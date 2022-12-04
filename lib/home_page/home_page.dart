@@ -12,6 +12,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var _selectedItem = 0;
+  var _isDescending = true;
+  var _order = 'timestamp';
+
+  ordering() {
+    if (_selectedItem == 0) {
+      setState(() {
+        _order = 'timestamp';
+        _isDescending = true;
+      });
+    } else if (_selectedItem == 1) {
+      setState(() {
+        _order = 'timestamp';
+        _isDescending = false;
+      });
+    } else if (_selectedItem == 2) {
+      setState(() {
+        _order = 'title';
+        _isDescending = false;
+      });
+    } else {
+      setState(() {
+        _order = 'title';
+        _isDescending = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +61,59 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(
-            tooltip: 'sort by datetime',
-            onPressed: () {},
-            icon: const Icon(Icons.sort_sharp),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: PopupMenuButton(
+                initialValue: _selectedItem,
+                onSelected: (value) {
+                  setState(() {
+                    _selectedItem = value;
+                    ordering();
+                  });
+                },
+                child: const Text('SORTUJ'),
+                itemBuilder: (BuildContext bc) {
+                  return [
+                    PopupMenuItem(
+                      enabled: false,
+                      child: Text(
+                        'SORTUJ:',
+                        style: GoogleFonts.lato(),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 0,
+                      child: Text(
+                        'Od najnowszych',
+                        style: GoogleFonts.lato(),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 1,
+                      child: Text(
+                        'Od najstarszych',
+                        style: GoogleFonts.lato(),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Text(
+                        'Alfabetycznie A-Z',
+                        style: GoogleFonts.lato(),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 3,
+                      child: Text(
+                        'Alfabetycznie Z-A',
+                        style: GoogleFonts.lato(),
+                      ),
+                    ),
+                  ];
+                },
+              ),
+            ),
           ),
         ],
       ),
@@ -60,7 +137,7 @@ class _HomePageState extends State<HomePage> {
         child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('tasks')
-                .orderBy('timestamp', descending: false)
+                .orderBy(_order, descending: _isDescending)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {

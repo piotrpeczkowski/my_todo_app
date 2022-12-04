@@ -193,7 +193,11 @@ class ModalBottomSheetAdd {
 }
 
 class ModalBottomSheetUpdate {
-  static void updatePosition(context) {
+  static void updatePosition(context, [DocumentSnapshot? documentSnapshot]) {
+    final title = TextEditingController();
+    if (documentSnapshot != null) {
+      title.text = documentSnapshot['title'];
+    }
     showModalBottomSheet(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       isScrollControlled: true,
@@ -256,7 +260,7 @@ class ModalBottomSheetUpdate {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5)),
                       ),
-                      controller: null,
+                      controller: title,
                     ),
                   ),
                 ),
