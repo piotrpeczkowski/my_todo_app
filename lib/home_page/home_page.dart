@@ -124,6 +124,8 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
@@ -141,11 +143,13 @@ class _HomePageState extends State<HomePage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Text('Coś poszło nie tak.. :C');
+                return const Center(child: Text('Coś poszło nie tak.. :C'));
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator(
-                  color: Colors.white54,
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white54,
+                  ),
                 );
               }
 
