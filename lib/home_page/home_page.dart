@@ -152,13 +152,56 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
-
+              if (snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text(
+                    'Brak wpisów do wyświetlenia',
+                    style: GoogleFonts.lato(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }
               final documents = snapshot.data!.docs;
-
               return ListView(
                 children: [
                   for (final document in documents) ...[
-                    NoteWidget(document['title'], document['date'])
+                    Dismissible(
+                      key: ValueKey(document.id),
+                      background: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.delete,
+                              color: Color.fromARGB(255, 255, 92, 81),
+                            ),
+                            Text(
+                              'Usuń',
+                              style: GoogleFonts.lato(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      const Color.fromARGB(255, 255, 92, 81)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onDismissed: (_) {
+                        FirebaseFirestore.instance
+                            .collection('tasks')
+                            .doc(document.id)
+                            .delete();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Pozycja usunięta'),
+                          duration: Duration(seconds: 1),
+                        ));
+                      },
+                      child: NoteWidget(document['title'], document['date']),
+                    ),
                   ],
                 ],
               );
