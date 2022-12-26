@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_todo_app/home_page/cubit/home_page_cubit.dart';
 import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/widgets/widgets.dart';
 
@@ -136,23 +138,21 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('tasks')
-                .orderBy(_order, descending: _isDescending)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
+        child: BlocProvider(
+          create: (context) => HomePageCubit()..start(),
+          child: BlocBuilder<HomePageCubit, HomePageState>(
+            builder: (context, state) {
+              if (state.errorMessage.isNotEmpty) {
                 return const Center(child: Text('Coś poszło nie tak.. :C'));
               }
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (state.isLoading == true) {
                 return const Center(
                   child: CircularProgressIndicator(
                     color: Colors.white54,
                   ),
                 );
               }
-              if (snapshot.data!.docs.isEmpty) {
+              if (state.documents.isEmpty) {
                 return Center(
                   child: Text(
                     'Brak wpisów do wyświetlenia',
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
-              final documents = snapshot.data!.docs;
+              final documents = state.documents;
               return ListView(
                 children: [
                   for (final document in documents) ...[
@@ -205,7 +205,82 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ],
               );
-            }),
+
+              return StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('tasks')
+                      .orderBy(_order, descending: _isDescending)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                          child: Text('Coś poszło nie tak.. :C'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white54,
+                        ),
+                      );
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Brak wpisów do wyświetlenia',
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                    final documents = snapshot.data!.docs;
+                    return ListView(
+                      children: [
+                        for (final document in documents) ...[
+                          Dismissible(
+                            key: ValueKey(document.id),
+                            background: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.delete,
+                                    color: Color.fromARGB(255, 255, 92, 81),
+                                  ),
+                                  Text(
+                                    'Usuń',
+                                    style: GoogleFonts.lato(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromARGB(
+                                            255, 255, 92, 81)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onDismissed: (_) {
+                              FirebaseFirestore.instance
+                                  .collection('tasks')
+                                  .doc(document.id)
+                                  .delete();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Pozycja usunięta'),
+                                duration: Duration(seconds: 1),
+                              ));
+                            },
+                            child:
+                                NoteWidget(document['title'], document['date']),
+                          ),
+                        ],
+                      ],
+                    );
+                  });
+            },
+          ),
+        ),
       ),
     );
   }
