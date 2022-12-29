@@ -18,6 +18,10 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   StreamSubscription? _streamSubscription;
 
+  Future<void> deleteTask(String id) async {
+    FirebaseFirestore.instance.collection('tasks').doc(id).delete();
+  }
+
   Future<void> start() async {
     emit(
       const HomePageState(
