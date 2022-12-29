@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_todo_app/home_page/cubit/home_page_cubit.dart';
 
 class NoteWidget extends StatelessWidget {
   const NoteWidget(
@@ -48,8 +50,9 @@ class NoteWidget extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () =>
-                      ModalBottomSheetUpdate.updatePosition(context),
+                  onPressed: () {
+                    ModalBottomSheetUpdate();
+                  },
                   icon: const Icon(
                     Icons.edit,
                     color: Colors.orange,
@@ -142,26 +145,33 @@ class ModalBottomSheetAdd {
                 //PRZYCISK DODAJ
                 Padding(
                   padding: const EdgeInsets.only(top: 0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange.withOpacity(0.9),
+                  child: BlocProvider(
+                    create: (context) => HomePageCubit(),
+                    child: BlocBuilder<HomePageCubit, HomePageState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange.withOpacity(0.9),
+                          ),
+                          onPressed: isChanged == false
+                              ? null
+                              : () {
+                                  context.read<HomePageCubit>().addTask(
+                                        title.text,
+                                        timestamp,
+                                        date,
+                                      );
+                                  Navigator.of(context).pop();
+                                },
+                          child: Text('Dodaj',
+                              style: GoogleFonts.lato(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
+                        );
+                      },
                     ),
-                    onPressed: isChanged == false
-                        ? null
-                        : () {
-                            FirebaseFirestore.instance.collection('tasks').add({
-                              'title': title.text,
-                              'timestamp': timestamp,
-                              'date': date,
-                            });
-                            Navigator.of(context).pop();
-                          },
-                    child: Text('Dodaj',
-                        style: GoogleFonts.lato(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )),
                   ),
                 ),
                 //PRZYCISK ANULUJ
@@ -193,10 +203,10 @@ class ModalBottomSheetAdd {
 }
 
 class ModalBottomSheetUpdate {
-  static void updatePosition(context, [DocumentSnapshot? documentSnapshot]) {
+  Future<void> updatePosition(context, [DocumentSnapshot? document]) async {
     final title = TextEditingController();
-    if (documentSnapshot != null) {
-      title.text = documentSnapshot['title'];
+    if (document != null) {
+      title.text = document['title'];
     }
     showModalBottomSheet(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
@@ -264,7 +274,7 @@ class ModalBottomSheetUpdate {
                     ),
                   ),
                 ),
-                //PRZYCISK DODAJ
+                //PRZYCISK ZAKTUALIZUJ
                 Padding(
                   padding: const EdgeInsets.only(top: 0),
                   child: ElevatedButton(
