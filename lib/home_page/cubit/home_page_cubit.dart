@@ -22,6 +22,15 @@ class HomePageCubit extends Cubit<HomePageState> {
     FirebaseFirestore.instance.collection('tasks').doc(id).delete();
   }
 
+  Future<void> updateTask(
+    String id,
+    String title,
+  ) async {
+    FirebaseFirestore.instance.collection('tasks').doc(id).update({
+      "title": title,
+    });
+  }
+
   Future<void> addTask(
     String title,
     Timestamp timestamp,
