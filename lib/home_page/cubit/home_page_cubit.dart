@@ -22,10 +22,10 @@ class HomePageCubit extends Cubit<HomePageState> {
     FirebaseFirestore.instance.collection('tasks').doc(id).delete();
   }
 
-  Future<void> updateTask(
-    String id,
-    String title,
-  ) async {
+  Future<void> updateTask({
+    required String title,
+    required String id,
+  }) async {
     FirebaseFirestore.instance.collection('tasks').doc(id).update({
       "title": title,
     });
@@ -43,7 +43,24 @@ class HomePageCubit extends Cubit<HomePageState> {
     });
   }
 
-  Future<void> start() async {
+  Future<void> orderBy(int _selectedItem) async {
+    if (_selectedItem == 0) {
+      start(true, 'timestamp');
+    } else if (_selectedItem == 1) {
+      start(false, 'timestamp');
+    } else if (_selectedItem == 2) {
+      //_order = 'title';
+      // _isDescending = false;
+    } else {
+      // _order = 'title';
+      // _isDescending = true;
+    }
+  }
+
+  Future<void> start(
+    bool isDescending,
+    String orderBy,
+  ) async {
     emit(
       const HomePageState(
         documents: [],
@@ -52,9 +69,10 @@ class HomePageCubit extends Cubit<HomePageState> {
       ),
     );
 
+    _streamSubscription?.cancel();
     _streamSubscription = FirebaseFirestore.instance
         .collection('tasks')
-        .orderBy('timestamp', descending: true)
+        .orderBy(orderBy, descending: isDescending)
         .snapshots()
         .listen((data) {
       emit(
