@@ -6,6 +6,7 @@ import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/methods/add_position.dart';
 import 'package:my_todo_app/methods/update_position.dart';
 import 'package:my_todo_app/widgets/note_widget.dart';
+import 'package:my_todo_app/widgets/order_popup_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,8 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedItem = 0;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -40,59 +39,11 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            actions: [
+            actions: const [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: PopupMenuButton(
-                    initialValue: _selectedItem,
-                    onSelected: (value) {
-                      setState(() {
-                        _selectedItem = value;
-                      });
-                      context.read<HomePageCubit>().orderBy(_selectedItem);
-                    },
-                    child: const Text('SORTUJ'),
-                    itemBuilder: (BuildContext bc) {
-                      return [
-                        PopupMenuItem(
-                          enabled: false,
-                          child: Text(
-                            'SORTUJ:',
-                            style: GoogleFonts.lato(),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 0,
-                          child: Text(
-                            'Od najnowszych',
-                            style: GoogleFonts.lato(),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 1,
-                          child: Text(
-                            'Od najstarszych',
-                            style: GoogleFonts.lato(),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 2,
-                          child: Text(
-                            'Alfabetycznie A-Z',
-                            style: GoogleFonts.lato(),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 3,
-                          child: Text(
-                            'Alfabetycznie Z-A',
-                            style: GoogleFonts.lato(),
-                          ),
-                        ),
-                      ];
-                    },
-                  ),
+                  padding: EdgeInsets.only(right: 15),
+                  child: OrderPopupMenu(),
                 ),
               ),
             ],
