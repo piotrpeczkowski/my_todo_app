@@ -9,8 +9,9 @@ part 'home_page_state.dart';
 class HomePageCubit extends Cubit<HomePageState> {
   HomePageCubit()
       : super(
-          const HomePageState(
-            documents: [],
+          HomePageState(
+            documents: const [],
+            timestamp: Timestamp.now(),
             isLoading: false,
             errorMessage: '',
           ),
@@ -43,17 +44,15 @@ class HomePageCubit extends Cubit<HomePageState> {
     });
   }
 
-  Future<void> orderBy(int _selectedItem) async {
-    if (_selectedItem == 0) {
+  Future<void> orderBy(int selectedItem) async {
+    if (selectedItem == 0) {
       start(true, 'timestamp');
-    } else if (_selectedItem == 1) {
+    } else if (selectedItem == 1) {
       start(false, 'timestamp');
-    } else if (_selectedItem == 2) {
-      //_order = 'title';
-      // _isDescending = false;
+    } else if (selectedItem == 2) {
+      start(false, 'title');
     } else {
-      // _order = 'title';
-      // _isDescending = true;
+      start(true, 'title');
     }
   }
 
@@ -62,8 +61,9 @@ class HomePageCubit extends Cubit<HomePageState> {
     String orderBy,
   ) async {
     emit(
-      const HomePageState(
-        documents: [],
+      HomePageState(
+        documents: const [],
+        timestamp: Timestamp.now(),
         isLoading: true,
         errorMessage: '',
       ),
@@ -78,6 +78,7 @@ class HomePageCubit extends Cubit<HomePageState> {
       emit(
         HomePageState(
           documents: data.docs,
+          timestamp: Timestamp.now(),
           isLoading: false,
           errorMessage: '',
         ),
@@ -87,6 +88,7 @@ class HomePageCubit extends Cubit<HomePageState> {
         emit(
           HomePageState(
             documents: const [],
+            timestamp: Timestamp.now(),
             isLoading: false,
             errorMessage: error.toString(),
           ),

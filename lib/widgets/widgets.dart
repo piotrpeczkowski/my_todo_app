@@ -66,12 +66,12 @@ class NoteWidget extends StatelessWidget {
 }
 
 // class ModalBottomSheetAdd {
-//   static void addPosition(context) {
+//   Future<void> addPosition(context) async {
 //     final timestamp = Timestamp.now();
 //     final date = DateFormat('dd.MM.yyyy').format(DateTime.now());
 //     final title = TextEditingController();
 //     var isChanged = false;
-//     showModalBottomSheet(
+//     await showModalBottomSheet(
 //       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
 //       isScrollControlled: true,
 //       isDismissible: false,
