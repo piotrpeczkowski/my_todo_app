@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_todo_app/home_page/cubit/home_page_cubit.dart';
 import 'package:my_todo_app/main.dart';
-import 'package:my_todo_app/widgets/add_position.dart';
-import 'package:my_todo_app/widgets/update_position.dart';
-import 'package:my_todo_app/widgets/widgets.dart';
+import 'package:my_todo_app/methods/add_position.dart';
+import 'package:my_todo_app/methods/update_position.dart';
+import 'package:my_todo_app/widgets/note_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
