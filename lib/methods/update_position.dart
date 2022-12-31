@@ -87,12 +87,6 @@ Future<void> updatePosition(context, document) async {
                         ),
                         onPressed: () {
                           if (title.text != '') {
-                            // FirebaseFirestore.instance
-                            //     .collection('tasks')
-                            //     .doc(document!.id)
-                            //     .update({
-                            //   "title": title.text,
-                            // });
                             context.read<HomePageCubit>().updateTask(
                                   id: document!.id,
                                   title: title.text,
