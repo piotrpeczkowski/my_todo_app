@@ -35,7 +35,7 @@ Future<void> updatePosition(context, document) async {
                   ),
                 ),
               ),
-              //TEXT FIELD - NAZWA ZADANIA
+              //TEXT FIELD - TASK TITLE
               Padding(
                 padding: const EdgeInsets.only(bottom: 6, top: 10),
                 child: Theme(
@@ -74,7 +74,7 @@ Future<void> updatePosition(context, document) async {
                   ),
                 ),
               ),
-              //PRZYCISK ZAKTUALIZUJ
+              //UPDATE BUTTON
               Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: BlocProvider(
@@ -105,7 +105,7 @@ Future<void> updatePosition(context, document) async {
                   ),
                 ),
               ),
-              //PRZYCISK ANULUJ
+              //CANCEL BUTTON
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ElevatedButton(

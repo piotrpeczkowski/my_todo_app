@@ -35,7 +35,7 @@ Future<void> addPosition(context) async {
                   ),
                 ),
               ),
-              //TEXT FIELD - NAZWA ZADANIA
+              //TEXT FIELD - NEW TASK
               Padding(
                 padding: const EdgeInsets.only(bottom: 6, top: 10),
                 child: Theme(
@@ -77,7 +77,7 @@ Future<void> addPosition(context) async {
                   ),
                 ),
               ),
-              //PRZYCISK DODAJ
+              //ADD BUTTON
               Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: BlocProvider(
@@ -109,7 +109,7 @@ Future<void> addPosition(context) async {
                   ),
                 ),
               ),
-              //PRZYCISK ANULUJ
+              //CANCEL BUTTON
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: ElevatedButton(
