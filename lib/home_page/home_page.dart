@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomePageCubit(),
+      create: (context) => HomePageCubit()..orderBy(0),
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: AppBar(
