@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_todo_app/home_page/cubit/home_page_cubit.dart';
+import 'package:my_todo_app/features/home_page/cubit/home_page_cubit.dart';
 
 Future<void> addPosition(context) async {
   final date = DateFormat('dd.MM.yyyy').format(DateTime.now());
