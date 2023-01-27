@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_todo_app/splash_screen/splash_screen.dart';
+import 'package:my_todo_app/features/splash_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
